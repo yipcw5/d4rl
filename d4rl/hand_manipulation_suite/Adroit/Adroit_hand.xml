@@ -43,16 +43,15 @@
 			<!-- <joint type="free" limited="false"/> -->
 			<include file="resources/chain.xml"/>
 		</body>
-
-		<body name="ball" pos=".1 -.1 .25">
-            <geom type="sphere" size=".015" rgba=".7 .2 .2 1"/>
-            <joint class="free"/>               
-        </body>
 		
     </worldbody>
 	
 	<equality>
         <weld body1="mocap1" body2="forearm" solref="0.01 1" solimp=".9 .9 0.01"/>
 	</equality>
+
+	<actuator>
+		<velocity joint="FFJ3" kv='5' gear='4' forcerange='-1.5 1.5'/>
+	</actuator>
 
 </mujoco>
