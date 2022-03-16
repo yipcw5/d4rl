@@ -6,6 +6,8 @@ from mujoco_py import MjViewer
 from d4rl import offline_env
 import os
 
+from math import radians
+
 ADD_BONUS_REWARDS = True
 
 class DoorEnvV0(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
@@ -36,14 +38,21 @@ class DoorEnvV0(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
         self.handle_sid = self.model.site_name2id('S_handle')
         self.door_bid = self.model.body_name2id('frame')
 
-    def step(self, a):
+    def step(self, a, t=500):
         a = np.clip(a, -1.0, 1.0)
+        
         try:
             a = self.act_mid + a*self.act_rng # mean center and scale
+            print("act_mid {} act_rng {}".format(self.act_mid, self.act_rng))
         except:
             a = a                             # only for the initialization phase
         self.do_simulation(a, self.frame_skip)
+
+        state_dict = self.get_env_state()
+        self.set_env_state(state_dict, t)
+
         ob = self.get_obs()
+
         handle_pos = self.data.site_xpos[self.handle_sid].ravel()
         palm_pos = self.data.site_xpos[self.grasp_sid].ravel()
         door_pos = self.data.qpos[self.door_hinge_did]
@@ -81,16 +90,19 @@ class DoorEnvV0(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
         else:
             door_open = -1.0
         latch_pos = qp[-1]
+        #print(qp)
         return np.concatenate([qp[1:-2], [latch_pos], door_pos, palm_pos, handle_pos, palm_pos-handle_pos, [door_open]])
 
     def reset_model(self):
         qp = self.init_qpos.copy()
         qv = self.init_qvel.copy()
+        #qp[11] = 0.45
         self.set_state(qp, qv)
-
+        '''
         self.model.body_pos[self.door_bid,0] = self.np_random.uniform(low=-0.3, high=-0.2)
         self.model.body_pos[self.door_bid,1] = self.np_random.uniform(low=0.25, high=0.35)
         self.model.body_pos[self.door_bid,2] = self.np_random.uniform(low=0.252, high=0.35)
+        '''
         self.sim.forward()
         return self.get_obs()
 
@@ -98,19 +110,50 @@ class DoorEnvV0(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
         """
         Get state of hand as well as objects and targets in the scene
         """
+        
         qp = self.data.qpos.ravel().copy()
         qv = self.data.qvel.ravel().copy()
         door_body_pos = self.model.body_pos[self.door_bid].ravel().copy()
         return dict(qpos=qp, qvel=qv, door_body_pos=door_body_pos)
 
-    def set_env_state(self, state_dict):
+    def finger_mvt(self, qp, move_no):
+        qp[2] = 1.57 # hand positioned sideways
+        #qp[3] = 3.14 # hand faces upwards
+        if move_no == 1:
+            qp[7] = radians(136-117)
+            qp[8] = radians(171-95)
+            qp[9] = radians(140-65)
+        elif move_no == 2:
+            qp[7] = radians(57-117)
+            qp[8] = radians(20-95)
+            qp[9] = radians(102-65)
+        
+
+        return qp
+
+    def set_env_state(self, state_dict, ts):
         """
         Set the state which includes hand as well as objects and targets in the scene
         """
-        qp = state_dict['qpos']
-        qv = state_dict['qvel']
+        #qp = state_dict['qpos']
+        #qv = state_dict['qvel']
+        
+        qp = np.array([0.0] * 30)
+        qv = np.array([0.0] * 30)
+
+        # indnex finger hardcode TEST
+        
+        move_no = 0
+        qp = self.finger_mvt(qp, move_no)
+        
         self.set_state(qp, qv)
         self.model.body_pos[self.door_bid] = state_dict['door_body_pos']
+        print("qp", qp)
+        '''
+        print("qp", qp)
+        print("qv", qv)
+        print("pos", self.model.body_pos)
+        '''
         self.sim.forward()
 
     def mj_viewer_setup(self):
