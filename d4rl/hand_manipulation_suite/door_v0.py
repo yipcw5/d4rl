@@ -127,6 +127,10 @@ class DoorEnvV0(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
             qp[7] = radians(57-117)
             qp[8] = radians(20-95)
             qp[9] = radians(102-65)
+        elif move_no == 8:
+            qp[7] = radians(10)
+            qp[8] = radians(10)
+            qp[9] = radians(-3)
         
 
         return qp
@@ -143,7 +147,7 @@ class DoorEnvV0(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
 
         # indnex finger hardcode TEST
         
-        move_no = 0
+        move_no = 8
         qp = self.finger_mvt(qp, move_no)
         
         self.set_state(qp, qv)
