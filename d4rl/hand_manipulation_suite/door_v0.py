@@ -38,7 +38,8 @@ class DoorEnvV0(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
         self.handle_sid = self.model.site_name2id('S_handle')
         self.door_bid = self.model.body_name2id('frame')
 
-    def step(self, a, t=500):
+    def step(self, qp):
+        '''
         a = np.clip(a, -1.0, 1.0)
         
         try:
@@ -47,15 +48,36 @@ class DoorEnvV0(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
         except:
             a = a                             # only for the initialization phase
         self.do_simulation(a, self.frame_skip)
-
+        '''
+        
         state_dict = self.get_env_state()
-        self.set_env_state(state_dict, t)
+        state_dict['door_body_pos'] = [0.0] * 3
+        print('qp', qp)
+        print('pos', state_dict['door_body_pos'])
+        #qp = state_dict['qpos']
+        #qv = state_dict['qvel']
+        '''
+        qp = np.array([0.0] * 30)
+        qv = np.array([0.0] * 30)
+
+        # indnex finger hardcode TEST
+        move_no = 8
+        qp = self.finger_mvt(qp, move_no)
+        
+        self.set_state(qp, qv)
+        '''
+        self.set_env_state(state_dict)
+        #qp = state_dict['qpos']
+        
+        self.do_simulation(qp, self.frame_skip)
 
         ob = self.get_obs()
 
         handle_pos = self.data.site_xpos[self.handle_sid].ravel()
         palm_pos = self.data.site_xpos[self.grasp_sid].ravel()
         door_pos = self.data.qpos[self.door_hinge_did]
+
+        print('here', state_dict['door_body_pos'])
 
         # get to handle
         reward = -0.1*np.linalg.norm(palm_pos-handle_pos)
@@ -76,6 +98,7 @@ class DoorEnvV0(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
         goal_achieved = True if door_pos >= 1.35 else False
 
         return ob, reward, False, dict(goal_achieved=goal_achieved)
+        #return qp
 
     def get_obs(self):
         # qpos for hand
@@ -135,10 +158,12 @@ class DoorEnvV0(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
 
         return qp
 
-    def set_env_state(self, state_dict, ts):
+    def set_env_state(self, state_dict):
         """
         Set the state which includes hand as well as objects and targets in the scene
         """
+        '''
+        # This section has been moved to step()
         #qp = state_dict['qpos']
         #qv = state_dict['qvel']
         
@@ -146,19 +171,21 @@ class DoorEnvV0(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
         qv = np.array([0.0] * 30)
 
         # indnex finger hardcode TEST
-        
         move_no = 8
         qp = self.finger_mvt(qp, move_no)
         
         self.set_state(qp, qv)
+        '''
         self.model.body_pos[self.door_bid] = state_dict['door_body_pos']
-        print("qp", qp)
+        
+        #print("qp", qp)
         '''
         print("qp", qp)
         print("qv", qv)
         print("pos", self.model.body_pos)
         '''
         self.sim.forward()
+        #return qp
 
     def mj_viewer_setup(self):
         self.viewer = MjViewer(self.sim)
