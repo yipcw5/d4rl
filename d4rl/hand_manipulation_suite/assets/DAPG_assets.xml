@@ -46,6 +46,8 @@
         <material name="wallybody" texture="wally" />
         <texture type="2d" name="person" file="person.png" />
         <material name="personbody" texture="person" />
+        <texture type="2d" name="person1" file="person1.png" />
+        <material name="personbody1" texture="person1" />
 
         <texture type="2d" name="groundplane" builtin="checker" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" width="100" height="100" />
         <texture type="2d" name="marble2d" file="marble.png" />
