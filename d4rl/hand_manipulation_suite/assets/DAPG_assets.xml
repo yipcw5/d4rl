@@ -1,11 +1,11 @@
  <mujocoinclude>
      <!-- <compiler angle="radian" meshdir='../../../Adroit/resources/meshes/' texturedir='../../../Adroit/resources/textures/' /> -->
      <compiler angle="radian" meshdir='../Adroit/resources/meshes/' texturedir='../Adroit/resources/textures/' /> 
-    <option apirate="200" iterations="20" noslip_iterations="20"/>
+    <option timestep="0.0333" apirate="200" iterations="20" noslip_iterations="20"/>
     <size njmax="500" nconmax="100" nstack="600000" nuser_body="9" nuser_jnt="1" nuser_site="1" nuser_tendon="1" nuser_actuator="16" nuser_sensor="1" />
     <visual>
-        <global offwidth="3024" offheight="1680" />
-        <quality shadowsize="4096" offsamples="8" />
+        <global offwidth="3024" offheight="1680"/>
+        <quality shadowsize="0" offsamples="8" />
         <map force="0.1" fogend="5" />
     </visual>
     <default class="main">
@@ -39,7 +39,14 @@
         <texture type="cube" name="square" file="square.png" />
         <texture type="cube" name="foil" file="silverRaw.png" />
         <texture type="cube" name="woodb" file="woodb.png" />
+
+        <!-- My input -->
         <texture type="2d" name="skin" file="skin2.png" />
+        <texture type="2d" name="wally" file="wally.png" />
+        <material name="wallybody" texture="wally" />
+        <texture type="2d" name="person" file="person.png" />
+        <material name="personbody" texture="person" />
+
         <texture type="2d" name="groundplane" builtin="checker" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" width="100" height="100" />
         <texture type="2d" name="marble2d" file="marble.png" />
         <texture type="cube" name="marblecube" file="marble.png" />
