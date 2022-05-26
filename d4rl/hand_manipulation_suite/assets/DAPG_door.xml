@@ -21,7 +21,7 @@
     <!-- ======= WORLD ======= -->
     <worldbody>
         <light directional='false' diffuse='.7 .7 .7' specular='0.03 0.03 0.03' pos='-1 -1.0 4.0' dir='1 1.0 -4'/>
-        <geom name='ground' size="1.5 1.5 0.25" pos="0 0 -1" type="plane" contype="1" conaffinity="0" material="personbody1" />
+        <geom name='ground' size="1.5 1.5 0.25" pos="0 0 -1" type="plane" contype="1" conaffinity="0" material="groundplane" />
         <!-- <camera name="fixed" pos="0 -0.7 0.7" quat="0.92388 0.382683 0 0" /> -->
         <!-- Camera for the VIL paper - camera #3 -->
         <camera name="vil_camera" pos="0 -0.3 1.2" quat="1 0 0 0" />
@@ -41,7 +41,9 @@
             <joint name="ARRx" pos="0 0 0" axis="1 0 0" range="-0.75 0.75" damping="20" />
             <joint name="ARRy" pos="0 0 0" axis="0 1 0" range="-0.75 0.75" damping="20" />
             <joint name="ARRz" pos="0 0 0" axis="0 0 1" range="-1 2" damping="20" />
+            <!-- Remove forearm
             <geom name="V_forearm" class="D_Vizual" pos="0 -.01 .181" euler="0 0 -1.57"  material="MatViz" mesh="forearm_simple" />
+            -->
             <geom name="C_forearm1" class="DC_Hand" size="0.05 0.033" pos="0 0 0.29" type="capsule" material="MatViz" rgba="0.4 0.5 0.6 0.1" />
             
             <!-- ======= Adroit ======= -->
