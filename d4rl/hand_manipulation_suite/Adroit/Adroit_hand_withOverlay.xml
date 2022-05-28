@@ -49,9 +49,9 @@
 		</body>
 		
     </worldbody>
-	
+	<!--
 	<equality>
         <weld body1="mocap1" body2="forearm" solref="0.01 1" solimp=".9 .9 0.01"/>
 	</equality>
-
+	-->
 </mujoco>

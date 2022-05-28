@@ -45,11 +45,11 @@
 		</body>
 		
     </worldbody>
-	
+	<!--
 	<equality>
         <weld body1="mocap1" body2="forearm" solref="0.01 1" solimp=".9 .9 0.01"/>
 	</equality>
-
+	-->
 	<actuator>
 		<velocity joint="FFJ3" kv='5' gear='4' forcerange='-1.5 1.5'/>
 	</actuator>
