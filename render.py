@@ -21,31 +21,25 @@ glove = np.transpose(data['glove'])
 # hardcoded time period a-b of joint angles to simulate, taken from manual inspection of matlab plot
 a = 3700
 b = 4000
+glove = glove[:,3700:4000]
 
-meta, prox, dist = glove[4][a:b], glove[5][a:b], glove[6][a:b]
+# qp (d4rl controls) - data (ninaweb joint numbers) pairs
+pairs = {
+    7: 5,
+    8: 6,
+    9: 7
+}
 
 for t in range(b-a):
     
     qp = np.array([0.0] * 30)
     
-    qp[2] = 1.2 # azimuth
-    #qp[1] = -1.57 # vertical
-    qp[3] = 1.57 # faceup
+    #qp[2] = 1.2 # azimuth
+    qp[3] = 3.14 # faceup
 
-    qp[7] = radians(meta[t]-meta[0])
-    qp[8] = radians(prox[t]-prox[0])
-    qp[9] = radians(dist[t]-dist[0])
+    for key in pairs.keys():
+        value = pairs[key]-1 # matlab-to-python array conversion
+        qp[key] = radians(glove[value,t]-glove[value,0])
     
-    '''
-    qp[7] += radians(136-117) * s/iters #base joint
-    qp[8] += radians(171-95) * s/iters #middle joint
-    qp[9] += radians(140-65) * s/iters #top joint
-    '''
     _ = env.step(qp)
-    #print('www',env.action_space.sample())
     env.mj_render()
-    #print('qp', qp)
-    #env.step(1.0)
-    #env.mj_render()
-
-#env.action_space.sample()
