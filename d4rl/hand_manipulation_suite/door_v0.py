@@ -52,8 +52,8 @@ class DoorEnvV0(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
         
         state_dict = self.get_env_state()
         state_dict['door_body_pos'] = [0.0] * 3
-        print('qp', qp)
-        print('pos', state_dict['door_body_pos'])
+        #print('qp', qp)
+        #print('pos', state_dict['door_body_pos'])
         #qp = state_dict['qpos']
         #qv = state_dict['qvel']
         '''
@@ -77,7 +77,7 @@ class DoorEnvV0(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
         palm_pos = self.data.site_xpos[self.grasp_sid].ravel()
         door_pos = self.data.qpos[self.door_hinge_did]
 
-        print('here', state_dict['door_body_pos'])
+        #print('here', state_dict['door_body_pos'])
 
         # get to handle
         reward = -0.1*np.linalg.norm(palm_pos-handle_pos)
@@ -189,9 +189,15 @@ class DoorEnvV0(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
 
     def mj_viewer_setup(self):
         self.viewer = MjViewer(self.sim)
+        from mujoco_py.generated import const
+        self.viewer.cam.type = const.CAMERA_FIXED
+        self.viewer.cam.fixedcamid = 0
         self.viewer.cam.azimuth = 90
+        self.viewer.cam.lookat[0] += 0.5  
         self.sim.forward()
         self.viewer.cam.distance = 1.5
+        #self.viewer._record_video = True
+        #self.viewer._video_path = "/output.mp4"
 
     def evaluate_success(self, paths):
         num_success = 0
