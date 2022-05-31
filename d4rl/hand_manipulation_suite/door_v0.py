@@ -192,9 +192,8 @@ class DoorEnvV0(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
         self.viewer = MjViewer(self.sim)
         from mujoco_py.generated import const
         self.viewer.cam.type = const.CAMERA_FIXED
-        self.viewer.cam.fixedcamid = 0
+        self.viewer.cam.fixedcamid = 1
         self.viewer.cam.azimuth = 90
-        self.viewer.cam.lookat[0] += 0.5  
         self.sim.forward()
         self.viewer.cam.distance = 1.5
         #self.viewer._record_video = True

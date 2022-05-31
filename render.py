@@ -27,19 +27,33 @@ glove = glove[:,3700:4000]
 pairs = {
     7: 5,
     8: 6,
-    9: 7
+    9: 7,
+    # all other joints besides index finger
+    11: 8,
+    12: 9,
+    13: 10,
+    15: 12,
+    16: 13,
+    17: 14,
+    20: 16,
+    21: 17,
+    22: 18,
+    #24: 4,
+    25: 3
 }
 
 for t in range(b-a):
     
     qp = np.array([0.0] * 30)
     
-    #qp[2] = 1.2 # azimuth
-    qp[3] = 3.14 # faceup
+    qp[2] = 3.14 # azimuth
+    qp[3] = 1.6 # edge
+    qp[24] = 0.78 # move thumb away
 
-    for key in pairs.keys():
-        value = pairs[key]-1 # matlab-to-python array conversion
-        qp[key] = radians(glove[value,t]-glove[value,0])
-    
+    if t>0: # once hand is secured
+        for key in pairs.keys():
+            value = pairs[key]-1 # matlab-to-python array conversion
+            qp[key] = radians(glove[value,t]-glove[value,0])
+        
     _ = env.step(qp)
     env.mj_render()
