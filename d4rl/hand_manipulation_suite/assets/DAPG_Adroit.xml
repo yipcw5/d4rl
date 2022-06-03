@@ -2,9 +2,9 @@
     <body name="wrist" pos="0 0 0.396">
         <inertial pos="0.003 0 0.016" quat="0.504234 0.49623 0.49523 0.504234" mass="0.3" diaginertia="0.001 0.001 0.001" />
         <joint name="WRJ1" pos="0 0 0" axis="0 1 0" range="-0.524 0.175" armature="0.005" damping="0.5" user="1123" />
-        <geom name="V_wrist" class="D_Vizual" mesh="wrist" />
+        <geom name="V_wrist" class="D_Vizual" mesh="wrist" /> <!--comment to remove wrist-->
         <geom name="C_wrist" class="DC_Hand" size="0.015 0.01" quat="0.707107 0.707107 0 0" type="capsule" rgba="0.4 0.5 0.6 0.1" />
-        <body name="palm" pos="0 0 0.034">
+        <body name="palm" pos="0.03 0.015 0.044"> <!-- originally pos= 0 0 0.034 -->
             <inertial pos="0.006 0 0.036" quat="0.715833 0.0439898 0.0749825 0.692839" mass="0.3" diaginertia="0.001 0.001 0.001" />
             <joint name="WRJ0" pos="0 0 0" axis="1 0 0" range="-0.785 0.611" armature="0.005" damping="0.5" user="1122" />
             <geom name="V_palm" class="D_Vizual" mesh="palm" />

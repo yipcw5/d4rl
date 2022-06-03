@@ -45,7 +45,7 @@
 		<!-- <mesh name="forearm_cvx" 	 file="resources/meshes/forearm_electric_cvx.stl"/> -->
 		<mesh name="forearm" file="resources/meshes/forearm_simple.stl"/>
 		<mesh name="forearm_cvx" 	 file="resources/meshes/forearm_simple_cvx.stl"/>
-		<mesh scale=".001 .001 .001" file="resources/meshes/wrist.stl"/>
+		<mesh scale=".001 .001 .001" file="resources/meshes/wrist_fake.stl"/>
 		<mesh scale=".001 .001 .001" file="resources/meshes/palm.stl"/>
 		<mesh scale=".001 .001 .001" file="resources/meshes/knuckle.stl"/>
 		<mesh scale=".001 .001 .001" file="resources/meshes/F3.stl"/>
