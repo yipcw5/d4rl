@@ -46,10 +46,16 @@ pairs = {
 for t in range(b-a):
     
     qp = np.array([0.0] * 30)
+
+    '''
+    qp[3]
+    <0.75pi: backhand/occluded view
+    =0.75pi: flat palm
+    >0.75pi: forehand view
+    =1.45pi: edge
+    '''
     
-    qp[2] = 0 # azimuth
-    
-    qp[3]= 1.25*3.14#0.2*pi#0.05*pi#0.75*3.14 # hand on edge
+    qp[3] = 1.45*pi
 
     qp[24] = 1.0 # move thumb away
 
@@ -61,8 +67,11 @@ for t in range(b-a):
     if t>0: # once hand is secured
         for key in pairs.keys():
             value = pairs[key]-1 # matlab-to-python array conversion
+            #qp[key] = radians(glove[value,t]-glove[value,0]) #normal
+
             if key==7: qp[key] = radians(45+glove[value,t]-glove[value,0])
             else: qp[key] = radians(glove[value,t]-glove[value,0])
+
     
     _ = env.step(qp)
     env.mj_render()
